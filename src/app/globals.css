@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply min-h-screen bg-mesh-light font-sans text-slate-900 antialiased transition-colors duration-500 dark:bg-mesh-dark dark:text-slate-100;
+}
+
+* {
+  @apply border-slate-200;
+}
+
+.glass-panel {
+  @apply rounded-[20px] border border-white/40 bg-white/70 shadow-soft backdrop-blur-2xl dark:border-white/10 dark:bg-white/5;
+}

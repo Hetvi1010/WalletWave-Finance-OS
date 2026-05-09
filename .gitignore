@@ -1,0 +1,14 @@
+.next
+node_modules
+.codex
+.env
+.env.local
+.env.production
+.walletwave-local-db.json
+dist
+coverage
+.DS_Store
+*.log
+tsconfig.tsbuildinfo
+client/.next
+server/dist
