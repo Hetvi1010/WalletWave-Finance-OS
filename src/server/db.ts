@@ -7,6 +7,10 @@ declare global {
 }
 
 export async function connectDatabase() {
+  if (!env.mongoUri) {
+    throw new Error("MONGODB_URI is not configured");
+  }
+
   if (!global.mongooseConnectionPromise) {
     global.mongooseConnectionPromise = mongoose
       .connect(env.mongoUri, {
@@ -23,7 +27,19 @@ export async function connectDatabase() {
   return global.mongooseConnectionPromise;
 }
 
+export function isPersistentStorageRequired() {
+  return process.env.NODE_ENV === "production";
+}
+
+export function isDatabaseConfigured() {
+  return Boolean(env.mongoUri);
+}
+
 export async function isDatabaseAvailable() {
+  if (!isDatabaseConfigured()) {
+    return false;
+  }
+
   if (global.mongooseUnavailableUntil && Date.now() < global.mongooseUnavailableUntil) {
     return false;
   }
