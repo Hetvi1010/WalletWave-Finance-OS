@@ -27,10 +27,6 @@ export async function connectDatabase() {
   return global.mongooseConnectionPromise;
 }
 
-export function isPersistentStorageRequired() {
-  return process.env.NODE_ENV === "production";
-}
-
 export function isDatabaseConfigured() {
   return Boolean(env.mongoUri);
 }

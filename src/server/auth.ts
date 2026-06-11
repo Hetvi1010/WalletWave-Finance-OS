@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { env } from "@/server/env";
-import { isDatabaseAvailable, isPersistentStorageRequired } from "@/server/db";
+import { isDatabaseAvailable } from "@/server/db";
 import { findLocalUserById } from "@/server/local-store";
 import { User } from "@/server/models/User";
 
@@ -28,10 +28,6 @@ export async function requireUser() {
     const payload = jwt.verify(token, env.jwtSecret) as { userId: string };
     if (await isDatabaseAvailable()) {
       return User.findById(payload.userId);
-    }
-
-    if (isPersistentStorageRequired()) {
-      return null;
     }
 
     return findLocalUserById(payload.userId);

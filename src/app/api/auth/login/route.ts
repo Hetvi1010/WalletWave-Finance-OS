@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { isDatabaseAvailable, isPersistentStorageRequired } from "@/server/db";
+import { isDatabaseAvailable } from "@/server/db";
 import { signToken } from "@/server/auth";
 import { findLocalUserByEmail, isLocalUser, verifyLocalUserPassword } from "@/server/local-store";
 import { User } from "@/server/models/User";
@@ -20,15 +20,6 @@ export async function POST(request: Request) {
 
     const email = values.email.toLowerCase();
     const useDatabase = await isDatabaseAvailable();
-    if (!useDatabase && isPersistentStorageRequired()) {
-      return NextResponse.json(
-        {
-          message: "Persistent account storage is not configured. Set MONGODB_URI before using live login."
-        },
-        { status: 503 }
-      );
-    }
-
     const user = useDatabase ? await User.findOne({ email }) : await findLocalUserByEmail(email);
     let validPassword = false;
 
