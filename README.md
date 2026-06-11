@@ -44,7 +44,6 @@ npm run dev
 
 - Deploy the single Next.js app to Vercel or any Node-compatible host.
 - Provide `MONGODB_URI`, `JWT_SECRET`, and optionally `NEXT_PUBLIC_API_URL`.
-- For live deployments, `MONGODB_URI` is required so accounts remain available for future logins.
 - If the frontend and API are served together, `NEXT_PUBLIC_API_URL` can be omitted because the app defaults to `/api`.
 
 ## Core features
