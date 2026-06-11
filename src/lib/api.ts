@@ -1,7 +1,11 @@
 import { AuthResponse, Budget, DashboardData, Transaction, User } from "@/types";
 import { getStoredToken } from "./auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+const isLocalApiUrl = configuredApiUrl
+  ? /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/i.test(configuredApiUrl)
+  : false;
+const API_URL = configuredApiUrl && !isLocalApiUrl ? configuredApiUrl.replace(/\/$/, "") : "/api";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const token = getStoredToken();

@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import os from "node:os";
 import bcrypt from "bcryptjs";
 
 export interface LocalUser {
@@ -43,7 +44,20 @@ interface LocalStore {
   budgets: LocalBudget[];
 }
 
-const storePath = path.join(process.cwd(), ".walletwave-local-db.json");
+function resolveStorePath() {
+  if (process.env.LOCAL_STORE_PATH) {
+    return process.env.LOCAL_STORE_PATH;
+  }
+
+  // Vercel/serverless deployments cannot rely on writing inside the app bundle.
+  if (process.env.VERCEL || process.env.NODE_ENV === "production") {
+    return path.join(os.tmpdir(), "walletwave-local-db.json");
+  }
+
+  return path.join(process.cwd(), ".walletwave-local-db.json");
+}
+
+const storePath = resolveStorePath();
 
 async function readStore(): Promise<LocalStore> {
   try {
@@ -55,6 +69,7 @@ async function readStore(): Promise<LocalStore> {
 }
 
 async function writeStore(store: LocalStore) {
+  await fs.mkdir(path.dirname(storePath), { recursive: true });
   await fs.writeFile(storePath, JSON.stringify(store, null, 2), "utf8");
 }
 
